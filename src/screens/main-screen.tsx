@@ -1,19 +1,12 @@
 import React, { useCallback, useState } from 'react'
-import {
-  Icon,
-  VStack,
-  useColorModeValue,
-  Fab,
-  Box,
-  IconButton,
-  HStack,
-} from 'native-base'
+import { Icon, VStack, useColorModeValue, Fab, StatusBar } from 'native-base'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import AnimatedColorBox from '../components/animated-color-box'
 import TaskList from '../components/task-list'
 import shortid from 'shortid'
-import Feather from 'react-native-vector-icons/Feather'
 import TaskReviews from '../components/task-reviews'
+import AppBar from '../components/app-bar'
+import { useDrawerStatus } from '@react-navigation/drawer'
 
 const initialData = [
   {
@@ -28,7 +21,7 @@ const initialData = [
   }
 ]
 
-export default function MainScreen({ navigation }) {
+export default function MainScreen() {
   const [data, setData] = useState(initialData)
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
 
@@ -76,41 +69,9 @@ export default function MainScreen({ navigation }) {
       bg={useColorModeValue('warmGray.50', 'primary.900')}
       w="full"
     >
-      <VStack h={300} bg="blue.900" pt={5} p={1}>
-        <HStack justifyContent="space-between" pt={5}>
-          <IconButton
-            borderRadius={100}
-            onPress={() => navigation.openDrawer()}
-            _icon={{
-              as: Feather,
-              name: 'menu',
-              size: 6,
-              color: 'white'
-            }}
-          />
-          <Box flex={1} flexDirection="row-reverse">
-            <IconButton
-              borderRadius={100}
-              onPress={() => navigation.navigate('About')}
-              _icon={{
-                as: Feather,
-                name: 'user',
-                size: 6,
-                color: 'white'
-              }}
-            />
-            <IconButton
-              borderRadius={100}
-              onPress={() => navigation.openDrawer()}
-              _icon={{
-                as: Feather,
-                name: 'settings',
-                size: 6,
-                color: 'white'
-              }}
-            />
-          </Box>
-        </HStack>
+      {useDrawerStatus() === 'closed' && <StatusBar barStyle="light-content" />}
+      <VStack h={300} bg="blue.900" p={1}>
+        <AppBar title='Home' />
         <TaskReviews
           totalValue={Math.round((taskDoneCount.length / data.length) * 100)}
         />
