@@ -1,11 +1,19 @@
 import React, { useCallback, useState } from 'react'
-import { Icon, VStack, useColorModeValue, Fab } from 'native-base'
-import { AntDesign } from '@expo/vector-icons'
+import {
+  Icon,
+  VStack,
+  useColorModeValue,
+  Fab,
+  Box,
+  IconButton,
+  HStack,
+} from 'native-base'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import AnimatedColorBox from '../components/animated-color-box'
 import TaskList from '../components/task-list'
 import shortid from 'shortid'
-import Masthead from '../components/masthead'
-import NavBar from '../components/navbar'
+import Feather from 'react-native-vector-icons/Feather'
+import TaskReviews from '../components/task-reviews'
 
 const initialData = [
   {
@@ -20,11 +28,11 @@ const initialData = [
   }
 ]
 
-export default function MainScreen() {
+export default function MainScreen({ navigation }) {
   const [data, setData] = useState(initialData)
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
 
-  const handleToggleTaskItem = useCallback(item => {
+  const handleToggleTaskItem = useCallback((item: any) => {
     setData(prevData => {
       const newData = [...prevData]
       const index = prevData.indexOf(item)
@@ -35,6 +43,9 @@ export default function MainScreen() {
       return newData
     })
   }, [])
+  const taskDoneCount = data.filter(item => {
+    return item.done
+  })
   const handleChangeTaskItemSubject = useCallback((item, newSubject) => {
     setData(prevData => {
       const newData = [...prevData]
@@ -46,13 +57,13 @@ export default function MainScreen() {
       return newData
     })
   }, [])
-  const handleFinishEditingTaskItem = useCallback(_item => {
+  const handleFinishEditingTaskItem = useCallback((_item: any) => {
     setEditingItemId(null)
   }, [])
-  const handlePressTaskItemLabel = useCallback(item => {
+  const handlePressTaskItemLabel = useCallback((item: any) => {
     setEditingItemId(item.id)
   }, [])
-  const handleRemoveItem = useCallback(item => {
+  const handleRemoveItem = useCallback((item: any) => {
     setData(prevData => {
       const newData = prevData.filter(i => i !== item)
       return newData
@@ -65,12 +76,45 @@ export default function MainScreen() {
       bg={useColorModeValue('warmGray.50', 'primary.900')}
       w="full"
     >
-      <Masthead
-        title="What's up, Bao Nguyen!"
-        image={require('../assets/masthead.png')}
-      >
-        <NavBar />
-      </Masthead>
+      <VStack h={300} bg="blue.900" pt={5} p={1}>
+        <HStack justifyContent="space-between" pt={5}>
+          <IconButton
+            borderRadius={100}
+            onPress={() => navigation.openDrawer()}
+            _icon={{
+              as: Feather,
+              name: 'menu',
+              size: 6,
+              color: 'white'
+            }}
+          />
+          <Box flex={1} flexDirection="row-reverse">
+            <IconButton
+              borderRadius={100}
+              onPress={() => navigation.navigate('About')}
+              _icon={{
+                as: Feather,
+                name: 'user',
+                size: 6,
+                color: 'white'
+              }}
+            />
+            <IconButton
+              borderRadius={100}
+              onPress={() => navigation.openDrawer()}
+              _icon={{
+                as: Feather,
+                name: 'settings',
+                size: 6,
+                color: 'white'
+              }}
+            />
+          </Box>
+        </HStack>
+        <TaskReviews
+          totalValue={Math.round((taskDoneCount.length / data.length) * 100)}
+        />
+      </VStack>
       <VStack
         flex={1}
         space={1}

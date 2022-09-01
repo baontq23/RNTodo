@@ -1,9 +1,9 @@
-import { extendTheme } from 'native-base'
+import {extendTheme} from 'native-base';
 
 const config = {
   useSystemColorMode: false,
-  initialColorMode: 'light'
-}
+  initialColorMode: 'light',
+};
 
 const colors = {
   primary: {
@@ -16,8 +16,8 @@ const colors = {
     600: '#446088',
     700: '#334866',
     800: '#223044',
-    900: '#111822'
-  }
-}
+    900: '#111822',
+  },
+};
 
-export default extendTheme({ config, colors })
+export default extendTheme({config, colors});
