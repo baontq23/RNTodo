@@ -35,7 +35,7 @@ export default function MainScreen() {
       return newData
     })
   }, [])
-  const taskDoneCount = data.filter(item => {
+  const taskDoneCount = data?.filter(item => {
     return item.done
   })
   useEffect(() => {

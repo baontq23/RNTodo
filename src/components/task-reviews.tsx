@@ -3,9 +3,9 @@ import React from 'react'
 
 interface Props {
   totalValue: number
-} 
+}
 
-const TaskReviews = ({totalValue}:Props) => {
+const TaskReviews = ({ totalValue }: Props) => {
   return (
     <Box alignItems="center" p={3}>
       <Box
@@ -33,7 +33,7 @@ const TaskReviews = ({totalValue}:Props) => {
             Overviews
           </Text>
           <Text mt="2" fontSize="sm" color={useColorModeValue("coolGray.700", "white")}>
-            You have completed {totalValue}% of the task
+            You have completed {isNaN(totalValue) ? 0 : totalValue}% of the task
           </Text>
           <Progress value={totalValue} mt={2} colorScheme={totalValue < 50 ? 'warning' : 'success'} />
         </Box>
