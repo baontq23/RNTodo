@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Icon, VStack, useColorModeValue, Fab, StatusBar } from 'native-base'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import AnimatedColorBox from '../components/animated-color-box'
@@ -7,25 +7,24 @@ import shortid from 'shortid'
 import TaskReviews from '../components/task-reviews'
 import AppBar from '../components/app-bar'
 import { useDrawerStatus } from '@react-navigation/drawer'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const initialData = [
-  {
-    id: shortid.generate(),
-    subject: 'Item 1',
-    done: false
-  },
-  {
-    id: shortid.generate(),
-    subject: 'Item 2',
-    done: false
-  }
-]
+type Task = {
+  id: string,
+  subject: string,
+  done: boolean
+}
 
 export default function MainScreen() {
-  const [data, setData] = useState(initialData)
+  const [data, setData] = useState<Task[]>([])
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
-
-  const handleToggleTaskItem = useCallback((item: any) => {
+  useEffect(() => {
+    AsyncStorage.getItem('taskData').then(value => {
+      const saveData = JSON.parse(value!);
+      setData(saveData);
+    })
+  }, [])
+  const handleToggleTaskItem = useCallback((item: Task) => {
     setData(prevData => {
       const newData = [...prevData]
       const index = prevData.indexOf(item)
@@ -39,7 +38,14 @@ export default function MainScreen() {
   const taskDoneCount = data.filter(item => {
     return item.done
   })
-  const handleChangeTaskItemSubject = useCallback((item, newSubject) => {
+  useEffect(() => {
+    AsyncStorage.setItem('taskData', JSON.stringify(data))
+      .catch(e => {
+        console.log(e)
+      })
+  }, [data])
+
+  const handleChangeTaskItemSubject = useCallback((item: Task, newSubject: string) => {
     setData(prevData => {
       const newData = [...prevData]
       const index = prevData.indexOf(item)
@@ -71,7 +77,7 @@ export default function MainScreen() {
     >
       {useDrawerStatus() === 'closed' && <StatusBar barStyle="light-content" />}
       <VStack h={300} bg="blue.900" p={1}>
-        <AppBar title='Home' />
+        <AppBar title="Home" />
         <TaskReviews
           totalValue={Math.round((taskDoneCount.length / data.length) * 100)}
         />
