@@ -10,8 +10,8 @@ import { useDrawerStatus } from '@react-navigation/drawer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type Task = {
-  id: string,
-  subject: string,
+  id: string
+  subject: string
   done: boolean
 }
 
@@ -20,8 +20,8 @@ export default function MainScreen() {
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
   useEffect(() => {
     AsyncStorage.getItem('taskData').then(value => {
-      const saveData = JSON.parse(value!);
-      setData(saveData);
+      const saveData = JSON.parse(value!)
+      setData(saveData)
     })
   }, [])
   const handleToggleTaskItem = useCallback((item: Task) => {
@@ -39,23 +39,25 @@ export default function MainScreen() {
     return item.done
   })
   useEffect(() => {
-    AsyncStorage.setItem('taskData', JSON.stringify(data))
-      .catch(e => {
-        console.log(e)
-      })
+    AsyncStorage.setItem('taskData', JSON.stringify(data)).catch(e => {
+      console.log(e)
+    })
   }, [data])
 
-  const handleChangeTaskItemSubject = useCallback((item: Task, newSubject: string) => {
-    setData(prevData => {
-      const newData = [...prevData]
-      const index = prevData.indexOf(item)
-      newData[index] = {
-        ...item,
-        subject: newSubject
-      }
-      return newData
-    })
-  }, [])
+  const handleChangeTaskItemSubject = useCallback(
+    (item: Task, newSubject: string) => {
+      setData(prevData => {
+        const newData = [...prevData]
+        const index = prevData.indexOf(item)
+        newData[index] = {
+          ...item,
+          subject: newSubject
+        }
+        return newData
+      })
+    },
+    []
+  )
   const handleFinishEditingTaskItem = useCallback((_item: any) => {
     setEditingItemId(null)
   }, [])
@@ -79,7 +81,11 @@ export default function MainScreen() {
       <VStack h={300} bg="blue.900" p={1}>
         <AppBar title="Home" />
         <TaskReviews
-          totalValue={Math.round((taskDoneCount.length / data.length) * 100)}
+          totalValue={
+            taskDoneCount
+              ? Math.round((taskDoneCount.length / data.length) * 100)
+              : 0
+          }
         />
       </VStack>
       <VStack
@@ -110,14 +116,24 @@ export default function MainScreen() {
         bg={useColorModeValue('blue.500', 'blue.400')}
         onPress={() => {
           const id = shortid.generate()
-          setData([
-            {
-              id,
-              subject: '',
-              done: false
-            },
-            ...data
-          ])
+          {
+            data
+              ? setData([
+                  {
+                    id,
+                    subject: '',
+                    done: false
+                  },
+                  ...data
+                ])
+              : setData([
+                  {
+                    id,
+                    subject: '',
+                    done: false
+                  }
+                ])
+          }
           setEditingItemId(id)
         }}
       />

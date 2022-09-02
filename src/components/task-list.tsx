@@ -52,7 +52,7 @@ export const AnimatedTaskItem = (props: TaskItemProps) => {
     onToggleItem(data)
   }, [data, onToggleItem])
   const handleChangeSubject = useCallback(
-    subject => {
+    (subject:string) => {
       onChangeSubject(data, subject)
     },
     [data, onChangeSubject]
@@ -115,7 +115,7 @@ export default function TaskList(props: TaskListProps) {
   return (
     <StyledScrollView ref={refScrollView} w="full">
       <AnimatePresence>
-        {data.map(item => (
+        {data?.map(item => (
           <AnimatedTaskItem
             key={item.id}
             data={item}
