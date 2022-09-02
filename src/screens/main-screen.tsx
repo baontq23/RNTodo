@@ -119,20 +119,20 @@ export default function MainScreen() {
           {
             data
               ? setData([
-                  {
-                    id,
-                    subject: '',
-                    done: false
-                  },
-                  ...data
-                ])
+                {
+                  id,
+                  subject: '',
+                  done: false
+                },
+                ...data
+              ])
               : setData([
-                  {
-                    id,
-                    subject: '',
-                    done: false
-                  }
-                ])
+                {
+                  id,
+                  subject: '',
+                  done: false
+                }
+              ])
           }
           setEditingItemId(id)
         }}
