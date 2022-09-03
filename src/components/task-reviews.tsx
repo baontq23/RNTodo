@@ -1,11 +1,14 @@
-import { Box, HStack, Badge, Text, Progress, useColorModeValue } from 'native-base'
+import { Box, HStack, Badge, Text, Progress, useColorModeValue, Spacer, Icon, IconButton, Spinner } from 'native-base'
 import React from 'react'
+import Feather from 'react-native-vector-icons/Feather'
 
 interface Props {
   totalValue: number
+  onClickRefresh?: () => void
+  loading?:boolean
 }
 
-const TaskReviews = ({ totalValue }: Props) => {
+const TaskReviews = ({ totalValue, onClickRefresh, loading }: Props) => {
   return (
     <Box alignItems="center" p={3}>
       <Box
@@ -28,6 +31,8 @@ const TaskReviews = ({ totalValue }: Props) => {
             >
               Tasks
             </Badge>
+            <Spacer />
+            <IconButton onPress={onClickRefresh} icon={ loading ? <Spinner color={useColorModeValue('indigo.500', 'white')} /> : <Icon as={Feather} name='refresh-ccw' size={5} color={useColorModeValue('black', 'white')} />} borderRadius='full' size={8} />
           </HStack>
           <Text color={useColorModeValue("coolGray.800", "white")} mt="3" fontWeight="medium" fontSize="xl">
             Overviews

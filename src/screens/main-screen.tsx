@@ -18,11 +18,17 @@ type Task = {
 export default function MainScreen() {
   const [data, setData] = useState<Task[]>([])
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
-  useEffect(() => {
+  const [loading, setLoading] = useState(false)
+  const getDataFromLocal = () => {
+    setLoading(true)
     AsyncStorage.getItem('taskData').then(value => {
       const saveData = JSON.parse(value!)
       setData(saveData)
+      setLoading(false);
     })
+  }
+  useEffect(() => {
+    getDataFromLocal()
   }, [])
   const handleToggleTaskItem = useCallback((item: Task) => {
     setData(prevData => {
@@ -32,6 +38,7 @@ export default function MainScreen() {
         ...item,
         done: !item.done
       }
+
       return newData
     })
   }, [])
@@ -42,7 +49,7 @@ export default function MainScreen() {
     AsyncStorage.setItem('taskData', JSON.stringify(data)).catch(e => {
       console.log(e)
     })
-  }, [data])
+  }, [editingItemId, data.length, taskDoneCount.length])
 
   const handleChangeTaskItemSubject = useCallback(
     (item: Task, newSubject: string) => {
@@ -86,6 +93,8 @@ export default function MainScreen() {
               ? Math.round((taskDoneCount.length / data.length) * 100)
               : 0
           }
+          onClickRefresh={getDataFromLocal}
+          loading={loading}
         />
       </VStack>
       <VStack
