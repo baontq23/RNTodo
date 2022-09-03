@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import {
   HStack,
   VStack,
-  Center,
   Avatar,
   Heading,
   IconButton,
@@ -13,7 +12,6 @@ import {
   DrawerContentComponentProps,
 } from '@react-navigation/drawer'
 import AnimatedColorBox from './animated-color-box'
-import ThemeToggle from './theme-toggle'
 import Feather from 'react-native-vector-icons/Feather'
 import MenuButton from './menu-button'
 
@@ -91,9 +89,6 @@ const Sidebar = (props: DrawerContentComponentProps) => {
           About
         </MenuButton>
       </VStack>
-      <Center>
-        <ThemeToggle />
-      </Center>
     </AnimatedColorBox>
   )
 }
