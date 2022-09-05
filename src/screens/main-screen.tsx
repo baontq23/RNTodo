@@ -49,7 +49,7 @@ export default function MainScreen() {
     AsyncStorage.setItem('taskData', JSON.stringify(data)).catch(e => {
       console.log(e)
     })
-  }, [editingItemId, data.length, taskDoneCount.length])
+  }, [editingItemId, data?.length, taskDoneCount?.length])
 
   const handleChangeTaskItemSubject = useCallback(
     (item: Task, newSubject: string) => {

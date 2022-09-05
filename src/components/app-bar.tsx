@@ -29,23 +29,25 @@ const AppBar = ({ title, useColorMode }: Props) => {
   }, [navigation])
   const handlePressSyncWithServerButton = useCallback(() => {
     fetch('https://api.rntodo.tk/sync.php').then(async res => {
-     await AsyncStorage.setItem('taskData', await res.text())
+      await AsyncStorage.setItem('taskData', await res.text())
       toast.show({
         description: 'Data sync successfully!'
       })
+    }).catch(e => {
+      console.log(e)
     })
     onClose()
   }, [navigation])
-  const handlePressSyncWithClientButton = useCallback( async () => {
+  const handlePressSyncWithClientButton = useCallback(async () => {
     const localData = await AsyncStorage.getItem('taskData')
-    
-       fetch('https://api.rntodo.tk/sync.php', {
+
+    fetch('https://api.rntodo.tk/sync.php', {
       method: 'PATCH',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: localData   
+      body: localData
     })
       .then(async res => {
         toast.show({
@@ -53,11 +55,11 @@ const AppBar = ({ title, useColorMode }: Props) => {
         })
       }).catch(e => {
         toast.show({
-          description:'Server error!'
+          description: 'Server error!'
         })
         console.log(e);
       })
-    
+
     onClose()
   }, [navigation])
 
